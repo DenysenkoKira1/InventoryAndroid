@@ -1,4 +1,4 @@
-package com.example.inventory.ui.ui_kit.fields
+package com.example.inventory.ui.ui_kit
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
@@ -11,12 +11,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun AppTextField(
-    value: String, onValueChange: (String) -> Unit, label: String,
-    modifier: Modifier = Modifier, isError: Boolean = false,
+fun InputTextField(
+    value: String = "",
+    onValueChange: (String) -> Unit = {},
+    label: String = "",
+    modifier: Modifier = Modifier,
+    isError: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
-    trailingIcon: (@Composable () -> Unit)? = null
+    trailingIcon: (@Composable () -> Unit)? = null,
+    leadingIcon: (@Composable () -> Unit)? = null
 ) {
     val colors = MaterialTheme.colorScheme
     OutlinedTextField(
@@ -31,6 +35,7 @@ fun AppTextField(
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
         trailingIcon = trailingIcon,
+        leadingIcon = leadingIcon,
         colors = OutlinedTextFieldDefaults.colors(
             focusedContainerColor = colors.surface,
             unfocusedContainerColor = colors.surface,

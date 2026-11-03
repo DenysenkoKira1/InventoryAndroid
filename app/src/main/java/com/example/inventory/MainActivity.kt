@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.example.inventory.ui.features.main.MainScreen
+import com.example.inventory.ui.features.search_inventory.SearchInventoryScreen
 import com.example.inventory.ui.theme.InventoryTheme
 
 class MainActivity : ComponentActivity() {
@@ -17,9 +18,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             InventoryTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    MainScreen(
+//                    MainScreen(
 //                        modifier = Modifier.padding(innerPadding)
-                    )
+//                    )
+                    SearchInventoryScreen()
                 }
             }
         }

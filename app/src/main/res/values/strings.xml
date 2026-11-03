@@ -4,4 +4,8 @@
     <string name="scan">Сканувати</string>
     <string name="search_inv">Пошук за серійним номером</string>
     <string name="inventoried">Проінвентаризовано</string>
+    <string name="unverified">Не перевірені</string>
+    <string name="verified">Перевірені</string>
+    <string name="search_by_serial_number">Пошук за серійним номером</string>
+    <string name="search">Пошук</string>
 </resources>

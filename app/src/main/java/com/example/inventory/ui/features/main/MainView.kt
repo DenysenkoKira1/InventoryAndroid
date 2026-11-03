@@ -15,17 +15,21 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -50,6 +54,7 @@ import com.example.inventory.ui.ui_kit.buttons.SecondaryButton
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
     val positionsState = rememberLazyListState()
+    var selectedTabIndex by rememberSaveable { mutableIntStateOf(0) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -77,7 +82,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
                 srnNumber = "ser-2",
                 name = "name-2 kjejflksjfkekjflw jdsfkjiewo;aww ekjuuorjwksdj wodjakor",
                 location = "location-2",
-                state = true
+                state = false
             )
             val asset3 = Asset(
                 invNumber = "inv-3",
@@ -105,15 +110,47 @@ fun MainScreen(modifier: Modifier = Modifier) {
                 srnNumber = "ser-6",
                 name = "name-6 kjejflksjfkekjflw jdsfkjiewo;aww ekjuuorjwksdj wodjakor",
                 location = "location-6",
-                state = true
+                state = false
             )
             val assets = listOf(asset1, asset2, asset3, asset4, asset5, asset6)
+            val uncheckedAssets = assets.filter { !it.state }
+            val checkedAssets = assets.filter { it.state }
+
+            val shownAssets = if (selectedTabIndex == 0) {
+                uncheckedAssets
+            } else {
+                checkedAssets
+            }
+            PrimaryTabRow(
+                selectedTabIndex = selectedTabIndex,
+                containerColor = MaterialTheme.colorScheme.background
+            ) {
+                Tab(
+                    selected = selectedTabIndex == 0,
+                    onClick = { selectedTabIndex = 0 },
+                    text = {
+                        Text(
+                            "${stringResource(R.string.unverified)} ${uncheckedAssets.size}",
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
+                )
+
+                Tab(
+                    selected = selectedTabIndex == 1,
+                    onClick = { selectedTabIndex = 1 },
+                    text = {
+                        Text(
+                            "${stringResource(R.string.verified)} ${checkedAssets.size}",
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
+                )
+            }
             GetContent(
-                assets = assets.toMutableList(),
+                assets = shownAssets.toMutableList(),
                 positionsState = positionsState
             )
-//            AppTextField(number, { number = it }, "Серійний номер")
-//            PrimaryButton("Неактивна кнопка", onClick = {}, isEnabled = false)
         }
     }
 }
@@ -121,7 +158,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
 @Composable
 private fun GetAppTopBar(
 ) {
-    AppTopBar(
+     AppTopBar(
         title = stringResource(R.string.inventory),
         actions = {
             IconButton(
