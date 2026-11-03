@@ -8,4 +8,6 @@
     <string name="verified">Перевірені</string>
     <string name="search_by_serial_number">Пошук за серійним номером</string>
     <string name="search">Пошук</string>
+    <string name="incorrect">Не вірно</string>
+    <string name="correct">Вірно</string>
 </resources>

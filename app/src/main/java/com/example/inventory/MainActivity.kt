@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import com.example.inventory.ui.features.inventory_info.InventoryReviewScreen
 import com.example.inventory.ui.features.main.MainScreen
 import com.example.inventory.ui.features.search_inventory.SearchInventoryScreen
 import com.example.inventory.ui.theme.InventoryTheme
@@ -21,7 +22,8 @@ class MainActivity : ComponentActivity() {
 //                    MainScreen(
 //                        modifier = Modifier.padding(innerPadding)
 //                    )
-                    SearchInventoryScreen()
+//                    SearchInventoryScreen()
+                    InventoryReviewScreen()
                 }
             }
         }

@@ -79,7 +79,7 @@ private fun GetTopBar(
 }
 
 @Composable
-fun GetBottomBar () {
+private fun GetBottomBar () {
     Box (
         modifier = Modifier
             .fillMaxWidth()
@@ -95,7 +95,7 @@ fun GetBottomBar () {
 }
 
 @Composable
-fun GetContent(
+private fun GetContent(
     innerPadding: PaddingValues
 ) {
     Column (
