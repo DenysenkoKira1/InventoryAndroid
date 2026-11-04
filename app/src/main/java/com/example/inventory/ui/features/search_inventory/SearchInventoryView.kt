@@ -33,20 +33,13 @@ import com.example.inventory.ui.ui_kit.buttons.PrimaryButton
 
 @Composable
 fun SearchInventoryScreen(
-//vm: SearchInventoryViewModel = hiltViewModel(),
-//statusMode: StatusMode,
-//onNavToInventoryInfoScreen:(MCard, StatusMode) -> Unit,
-//onNavToNewInventoryScreen:() -> Unit,
-//onBack: () -> Unit
+    onBack: () -> Unit = {},
+    onSearch: (String) -> Unit = {}
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            GetTopBar(
-//                vm,
-//                            onBack,
-//                viewState
-            )
+            GetTopBar(onBack = onBack)
         },
         bottomBar = {
             GetBottomBar(
@@ -66,15 +59,11 @@ fun SearchInventoryScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun GetTopBar(
-//    vm: SearchInventoryViewModel,
-//    onBack: () -> Unit,
-//    viewState: SearchInventoryState,
-) {
+private fun GetTopBar(onBack: () -> Unit) {
     val keyboardController = LocalSoftwareKeyboardController.current
     AppTopBar(
         title = stringResource(R.string.search_by_serial_number),
-//        onBack = onNavBack
+        onBack = onBack
     )
 }
 

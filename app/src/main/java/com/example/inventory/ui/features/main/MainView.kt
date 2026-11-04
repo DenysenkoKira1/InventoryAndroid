@@ -52,17 +52,21 @@ import com.example.inventory.ui.ui_kit.buttons.SecondaryButton
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(modifier: Modifier = Modifier) {
+fun MainScreen(modifier: Modifier = Modifier,
+               onSearch: () -> Unit = {},
+               onScan: () -> Unit = {},
+               onClear: () -> Unit = {}
+) {
     val positionsState = rememberLazyListState()
     var selectedTabIndex by rememberSaveable { mutableIntStateOf(0) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            GetAppTopBar()
+            GetAppTopBar(onClear = onClear)
         },
         bottomBar = {
-            GetBottomBar()
+            GetBottomBar(onSearch = onSearch, onScan = onScan)
         }
     ) { innerPadding ->
         Column(
@@ -156,13 +160,12 @@ fun MainScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun GetAppTopBar(
-) {
+private fun GetAppTopBar(onClear: () -> Unit) {
      AppTopBar(
         title = stringResource(R.string.inventory),
         actions = {
             IconButton(
-                onClick = {}
+                onClick = onClear
             ) {
                 Icon(
                     painterResource(R.drawable.clear_eraser),
@@ -175,7 +178,8 @@ private fun GetAppTopBar(
 
 
 @Composable
-private fun GetBottomBar(
+private fun GetBottomBar(onSearch: () -> Unit,
+                         onScan: () -> Unit
 ) {
     Column (
         modifier = Modifier
@@ -186,12 +190,12 @@ private fun GetBottomBar(
         PrimaryButton(
             modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp),
             title = stringResource(R.string.scan),
-            onClick = {}
+            onClick = onScan
         )
         SecondaryButton(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
             title = stringResource(R.string.search_inv),
-            onClick = {}
+            onClick = onSearch
         )
     }
 }
