@@ -52,10 +52,11 @@ import com.example.inventory.ui.ui_kit.buttons.SecondaryButton
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(modifier: Modifier = Modifier,
-               onSearch: () -> Unit = {},
-               onScan: () -> Unit = {},
-               onClear: () -> Unit = {}
+fun MainScreen(
+    modifier: Modifier = Modifier,
+    onSearch: () -> Unit = {},
+    onScan: () -> Unit = {},
+    onClear: () -> Unit = {}
 ) {
     val positionsState = rememberLazyListState()
     var selectedTabIndex by rememberSaveable { mutableIntStateOf(0) }
@@ -66,7 +67,10 @@ fun MainScreen(modifier: Modifier = Modifier,
             GetAppTopBar(onClear = onClear)
         },
         bottomBar = {
-            GetBottomBar(onSearch = onSearch, onScan = onScan)
+            GetBottomBar(
+                onSearch = onSearch,
+                onScan = onScan
+            )
         }
     ) { innerPadding ->
         Column(
@@ -127,10 +131,12 @@ fun MainScreen(modifier: Modifier = Modifier,
             }
             PrimaryTabRow(
                 selectedTabIndex = selectedTabIndex,
-                containerColor = MaterialTheme.colorScheme.background
+                containerColor = MaterialTheme.colorScheme.surface
             ) {
                 Tab(
                     selected = selectedTabIndex == 0,
+                    selectedContentColor = MaterialTheme.colorScheme.primary,
+                    unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                     onClick = { selectedTabIndex = 0 },
                     text = {
                         Text(
@@ -142,6 +148,8 @@ fun MainScreen(modifier: Modifier = Modifier,
 
                 Tab(
                     selected = selectedTabIndex == 1,
+                    selectedContentColor = MaterialTheme.colorScheme.primary,
+                    unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                     onClick = { selectedTabIndex = 1 },
                     text = {
                         Text(
@@ -160,12 +168,14 @@ fun MainScreen(modifier: Modifier = Modifier,
 }
 
 @Composable
-private fun GetAppTopBar(onClear: () -> Unit) {
-     AppTopBar(
+private fun GetAppTopBar(
+    onClear: () -> Unit
+) {
+    AppTopBar(
         title = stringResource(R.string.inventory),
         actions = {
             IconButton(
-                onClick = onClear
+                onClick = {}
             ) {
                 Icon(
                     painterResource(R.drawable.clear_eraser),
@@ -178,13 +188,14 @@ private fun GetAppTopBar(onClear: () -> Unit) {
 
 
 @Composable
-private fun GetBottomBar(onSearch: () -> Unit,
-                         onScan: () -> Unit
+private fun GetBottomBar(
+    onSearch: () -> Unit,
+    onScan: () -> Unit
 ) {
     Column (
         modifier = Modifier
             .fillMaxWidth()
-            .background(color =MaterialTheme.colorScheme.background),
+            .background(color = MaterialTheme.colorScheme.surface),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         PrimaryButton(
@@ -213,11 +224,11 @@ private fun GetContent(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.surfaceDim),
+            .background(color = MaterialTheme.colorScheme.background),
         state = positionsState,
     ) {
         items(assets) { asset ->
-           ContentCard(asset)
+            ContentCard(asset)
         }
     }
 }
@@ -238,7 +249,7 @@ private fun ContentCard(
             ),
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
+            containerColor = MaterialTheme.colorScheme.surface
         )
     ) {
         Row(
@@ -253,7 +264,7 @@ private fun ContentCard(
                     text = asset.invNumber,
                     style = MaterialTheme.typography.bodyLarge,
                     lineHeight = 24.sp,
-                    color = MaterialTheme.colorScheme.tertiary,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = ONE_LINE_IN_TEXT,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -264,7 +275,7 @@ private fun ContentCard(
                         text = asset.srnNumber,
                         style = MaterialTheme.typography.bodyLarge,
                         lineHeight = 24.sp,
-                        color = MaterialTheme.colorScheme.tertiary,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = ONE_LINE_IN_TEXT,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -275,7 +286,7 @@ private fun ContentCard(
                     text = asset.name,
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = MaterialTheme.colorScheme.onSurface,
                     maxLines = ONE_LINE_IN_TEXT,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -286,7 +297,7 @@ private fun ContentCard(
                         text = asset.location,
                         style = MaterialTheme.typography.bodyLarge,
                         lineHeight = 24.sp,
-                        color = MaterialTheme.colorScheme.onBackground,
+                        color = MaterialTheme.colorScheme.onSurface,
                         maxLines = ONE_LINE_IN_TEXT,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -306,7 +317,7 @@ private fun ContentCard(
             }
             Icon(
                 modifier = Modifier.align(Alignment.CenterVertically),
-                tint = MaterialTheme.colorScheme.tertiary,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 painter = painterResource(id = R.drawable.ic_arrow_right),
                 contentDescription = null
             )

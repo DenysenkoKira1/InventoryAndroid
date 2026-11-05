@@ -28,7 +28,7 @@ fun AppTopBar(
     title: String,
     onBack: (() -> Unit)? = null,
     actions: @Composable RowScope.() -> Unit = {},
-) {
+    ) {
 
     BoxWithConstraints() {
         TopAppBar(
@@ -55,8 +55,10 @@ fun AppTopBar(
             },
             actions = actions,
             colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.background,
-                titleContentColor = MaterialTheme.colorScheme.onBackground
+                containerColor = MaterialTheme.colorScheme.surface,
+                titleContentColor = MaterialTheme.colorScheme.onSurface,
+                navigationIconContentColor = MaterialTheme.colorScheme.primary,
+                actionIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant
             )
         )
     }
@@ -65,7 +67,7 @@ fun AppTopBar(
 
 @Composable
 private fun getTextStyleTitle(maxWidth: Dp): TextStyle {
-   return when {
+    return when {
         maxWidth < 360.dp -> {
             MaterialTheme.typography.titleMedium
         }

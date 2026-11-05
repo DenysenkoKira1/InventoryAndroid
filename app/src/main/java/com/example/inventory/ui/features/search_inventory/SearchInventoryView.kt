@@ -25,8 +25,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.inventory.R
+import com.example.inventory.ui.theme.InventoryTheme
 import com.example.inventory.ui.ui_kit.InputTextField
 import com.example.inventory.ui.ui_kit.bars.AppTopBar
 import com.example.inventory.ui.ui_kit.buttons.PrimaryButton
@@ -42,25 +44,21 @@ fun SearchInventoryScreen(
             GetTopBar(onBack = onBack)
         },
         bottomBar = {
-            GetBottomBar(
-//                vm,
-//                viewState,
-//                baseViewState,
-//                onNavToNewInventoryScreen
-            )
+            GetBottomBar()
         }
     ) { innerPadding ->
         GetContent(
-
             innerPadding
         )
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun GetTopBar(onBack: () -> Unit) {
+private fun GetTopBar(
+    onBack: () -> Unit,
+) {
     val keyboardController = LocalSoftwareKeyboardController.current
+
     AppTopBar(
         title = stringResource(R.string.search_by_serial_number),
         onBack = onBack
@@ -72,7 +70,7 @@ private fun GetBottomBar () {
     Box (
         modifier = Modifier
             .fillMaxWidth()
-            .background(color =MaterialTheme.colorScheme.background),
+            .background(color = MaterialTheme.colorScheme.surface),
     ) {
         PrimaryButton(
             modifier = Modifier.padding(16.dp),
@@ -91,12 +89,12 @@ private fun GetContent(
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues = innerPadding)
-            .background(color = MaterialTheme.colorScheme.surfaceDim),
+            .background(color = MaterialTheme.colorScheme.background),
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(color = MaterialTheme.colorScheme.background)
+                .background(color = MaterialTheme.colorScheme.surface)
         ) {
             GetSearchInput()
         }
@@ -106,7 +104,7 @@ private fun GetContent(
                 .fillMaxSize()
                 .padding(vertical = 8.dp)
                 .clip(MaterialTheme.shapes.medium)
-                .background(color = MaterialTheme.colorScheme.background),
+                .background(color = MaterialTheme.colorScheme.surface),
             contentAlignment = Alignment.Center
         ) { }
     }
@@ -149,4 +147,16 @@ private fun GetSearchInput(
 //        value = viewState.searchText,
 //        onValueChange = vm::onSearchChanged
     )
+}
+
+@Preview(name = "Світла тема", showBackground = true, widthDp = 390, heightDp = 760)
+@Composable
+private fun LightPreview() {
+    InventoryTheme(darkTheme = false) { SearchInventoryScreen() }
+}
+
+@Preview(name = "Темна тема", showBackground = true, widthDp = 390, heightDp = 760)
+@Composable
+private fun DarkPreview() {
+    InventoryTheme(darkTheme = true) { SearchInventoryScreen() }
 }

@@ -1,4 +1,4 @@
-package com.example.inventory.ui.features.inventory_review
+package com.example.inventory.ui.features.inventory_info
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -20,10 +21,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.inventory.R
 import com.example.inventory.core.constants.ONE_LINE_IN_TEXT
+import com.example.inventory.ui.theme.InventoryTheme
 import com.example.inventory.ui.theme.inventoriedColor
 import com.example.inventory.ui.ui_kit.bars.AppTopBar
 import com.example.inventory.ui.ui_kit.buttons.PrimaryButton
@@ -66,7 +69,7 @@ private fun GetTopBar(
 ) {
     AppTopBar(
         title = stringResource(R.string.inventory)
-                )
+    )
 }
 @Composable
 private fun GetContent(
@@ -76,19 +79,19 @@ private fun GetContent(
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues = innerPadding)
-            .background(color = MaterialTheme.colorScheme.surfaceDim)
+            .background(color = MaterialTheme.colorScheme.background)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(vertical = 8.dp)
-                .background(color = MaterialTheme.colorScheme.background)
+                .background(color = MaterialTheme.colorScheme.surface)
         ) {
             Text(
                 text = "hjfjgkjkjggfflkj987",
                 style = MaterialTheme.typography.bodyMedium,
                 lineHeight = 24.sp,
-                color = MaterialTheme.colorScheme.outlineVariant,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = ONE_LINE_IN_TEXT,
                 overflow = TextOverflow.Ellipsis
             )
@@ -98,7 +101,7 @@ private fun GetContent(
                 text = "asset.srnNumber",
                 style = MaterialTheme.typography.bodyLarge,
                 lineHeight = 24.sp,
-                color = MaterialTheme.colorScheme.tertiary,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = ONE_LINE_IN_TEXT,
                 overflow = TextOverflow.Ellipsis
             )
@@ -108,7 +111,7 @@ private fun GetContent(
                 text = "asset.name",
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onBackground,
+                color = MaterialTheme.colorScheme.onSurface,
                 maxLines = ONE_LINE_IN_TEXT,
                 overflow = TextOverflow.Ellipsis
             )
@@ -118,7 +121,7 @@ private fun GetContent(
                 text = "asset.location",
                 style = MaterialTheme.typography.bodyLarge,
                 lineHeight = 24.sp,
-                color = MaterialTheme.colorScheme.onBackground,
+                color = MaterialTheme.colorScheme.onSurface,
                 maxLines = ONE_LINE_IN_TEXT,
                 overflow = TextOverflow.Ellipsis
             )
@@ -148,7 +151,7 @@ private fun GetBottomBar(
         modifier = modifier,
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.background
+            containerColor = MaterialTheme.colorScheme.surface
         )
     ) {
         Row(
@@ -169,4 +172,16 @@ private fun GetBottomBar(
             )
         }
     }
+}
+
+@Preview(name = "Світла тема", showBackground = true, widthDp = 390, heightDp = 760)
+@Composable
+private fun LightPreview() {
+    InventoryTheme(darkTheme = false) { InventoryReviewScreen() }
+}
+
+@Preview(name = "Темна тема", showBackground = true, widthDp = 390, heightDp = 760)
+@Composable
+private fun DarkPreview() {
+    InventoryTheme(darkTheme = true) { InventoryReviewScreen() }
 }

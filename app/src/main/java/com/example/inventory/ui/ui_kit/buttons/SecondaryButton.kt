@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -30,9 +31,13 @@ fun SecondaryButton(
             .fillMaxWidth()
             .heightIn(min = 48.dp),
         enabled = isEnabled,
+        colors = ButtonDefaults.outlinedButtonColors(
+            contentColor = colors.primary,
+            disabledContentColor = colors.onSurfaceVariant
+        ),
         shape = MaterialTheme.shapes.small,
         border = BorderStroke(2.dp, if (isEnabled) colors.primary
-        else colors.onSurface.copy(alpha = 0.12f))
+        else colors.outlineVariant)
     ) {
         Text(
             title,
