@@ -13,6 +13,9 @@ hilt = "2.60.1"
 ksp = "2.3.10"
 navigation3 = "1.2.0"
 serialization = "1.9.0"
+codeScanner = "16.1.0"
+playServicesBase = "18.11.1"
+coroutinesPlayServices = "1.10.2"
 
 
 
@@ -37,6 +40,9 @@ hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hil
 navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "navigation3" }
 navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
 serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "serialization" }
+google-code-scanner = { module = "com.google.android.gms:play-services-code-scanner", version.ref = "codeScanner" }
+google-play-services-base = { module = "com.google.android.gms:play-services-base", version.ref = "playServicesBase" }
+coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutinesPlayServices" }
 
 
 

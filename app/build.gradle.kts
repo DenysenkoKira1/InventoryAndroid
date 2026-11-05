@@ -62,4 +62,7 @@ dependencies {
     implementation(libs.navigation3.runtime)
     implementation(libs.navigation3.ui)
     implementation(libs.serialization.core)
+    implementation(libs.google.code.scanner)
+    implementation(libs.google.play.services.base)
+    implementation(libs.coroutines.play.services)
 }

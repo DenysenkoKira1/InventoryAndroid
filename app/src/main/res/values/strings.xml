@@ -10,4 +10,19 @@
     <string name="search">Пошук</string>
     <string name="incorrect">Не вірно</string>
     <string name="correct">Вірно</string>
+    <string name="module_barcode_already_installed">
+    Модуль уже встановлений
+</string>
+    <string name="module_barcode_install_requested">
+    Запит встановлення прийнято
+</string>
+    <string name="module_barcode_handle_failure">
+    Помилка запиту встановлення
+</string>
+    <string name="module_barcode_complete">
+    Запит завершено; був встановлений: %1$s
+</string>
+    <string name="module_barcode_request_failed">
+    Запит завершився без успіху
+</string>
 </resources>
