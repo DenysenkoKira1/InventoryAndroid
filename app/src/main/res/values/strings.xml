@@ -25,4 +25,31 @@
     <string name="module_barcode_request_failed">
     Запит завершився без успіху
 </string>
+    <string name="media_error_create">
+    Не вдалося створити файл для фото.
+</string>
+    <string name="media_error_import">
+    Не вдалося зберегти вибране фото.
+</string>
+    <string name="media_error_read">
+    Не вдалося відкрити фото.
+</string>
+    <string name="media_error_delete">
+    Не вдалося видалити фото.
+</string>
+    <string name="media_error_image_required">
+    Потрібно вибрати зображення.
+</string>
+    <string name="media_error_open_stream">
+    Не вдалося прочитати вибране фото.
+</string>
+    <string name="media_error_directory">
+    Не вдалося створити каталог фото.
+</string>
+    <string name="media_error_file_name">
+    Некоректне ім’я файла.
+</string>
+    <string name="media_error_empty_file">
+    Фото відсутнє або файл порожній.
+</string>
 </resources>

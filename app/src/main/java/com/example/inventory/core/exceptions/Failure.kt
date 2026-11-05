@@ -7,6 +7,10 @@ sealed class Failure {
     ) : Failure()
     data object BarcodeScannerCancel : Failure()
 
+    data class MediaFailure(
+        val message: String
+    ) : Failure()
+
     abstract class FeatureFailure : Failure()
 
     data class UseCaseResultFailure(
