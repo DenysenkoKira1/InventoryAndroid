@@ -2,9 +2,9 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.room3)
 }
 
 android {
@@ -65,4 +65,11 @@ dependencies {
     implementation(libs.google.code.scanner)
     implementation(libs.google.play.services.base)
     implementation(libs.coroutines.play.services)
+    implementation(libs.room3.runtime)
+    implementation(libs.sqlite.framework)
+    ksp(libs.room3.compiler)
+}
+
+room3 {
+    schemaDirectory("$projectDir/schemas")
 }

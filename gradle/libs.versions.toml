@@ -16,6 +16,8 @@ serialization = "1.9.0"
 codeScanner = "16.1.0"
 playServicesBase = "18.11.1"
 coroutinesPlayServices = "1.10.2"
+room3 = "3.0.3"
+sqlite = "2.7.1"
 
 
 
@@ -43,13 +45,16 @@ serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-cor
 google-code-scanner = { module = "com.google.android.gms:play-services-code-scanner", version.ref = "codeScanner" }
 google-play-services-base = { module = "com.google.android.gms:play-services-base", version.ref = "playServicesBase" }
 coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutinesPlayServices" }
+room3-runtime = { module = "androidx.room3:room3-runtime", version.ref = "room3" }
+room3-compiler = { module = "androidx.room3:room3-compiler", version.ref = "room3" }
+sqlite-framework = { module = "androidx.sqlite:sqlite-framework", version.ref = "sqlite" }
 
 
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+room3 = { id = "androidx.room3", version.ref = "room3" }
