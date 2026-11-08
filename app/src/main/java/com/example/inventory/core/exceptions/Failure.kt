@@ -11,6 +11,17 @@ sealed class Failure {
         val message: String
     ) : Failure()
 
+    data object AssetNotFound : Failure()
+    data object InvalidName : Failure()
+    data object EmptyInventoryNumber : Failure()
+    data object EmptySerialNumber : Failure()
+    data object InvalidQuantity : Failure()
+    data object InvalidCondition : Failure()
+    data object CommentRequired : Failure()
+    data object PhotoRequired : Failure()
+    data object DuplicateInventoryNumber : Failure()
+    data object DuplicateSerialNumber : Failure()
+
     abstract class FeatureFailure : Failure()
 
     data class UseCaseResultFailure(
