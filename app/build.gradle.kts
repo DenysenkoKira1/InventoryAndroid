@@ -72,6 +72,7 @@ dependencies {
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.hilt.lifecycle.viewmodel.compose)
     implementation(libs.lifecycle.viewmodel.navigation3)
+    implementation(libs.coil.compose)
 }
 
 room3 {
