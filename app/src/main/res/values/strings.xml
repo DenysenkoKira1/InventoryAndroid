@@ -10,6 +10,29 @@
     <string name="search">Пошук</string>
     <string name="incorrect">Не вірно</string>
     <string name="correct">Вірно</string>
+    <string name="yes">Так</string>
+    <string name="no">Ні</string>
+    <string name="dialog_close">Закрити повідомлення</string>
+    <string name="main_clear_title">Очистити результати інвентаризації</string>
+    <string name="main_clear_question">Усі об’єкти знову стануть неперевіреними. Інші дані об’єктів залишаться без змін. Продовжити?</string>
+    <string name="main_clear_success">Результати інвентаризації очищено.</string>
+    <string name="main_clear_error">Не вдалося очистити результати інвентаризації.</string>
+    <string name="main_clear_error_details">Не вдалося очистити результати інвентаризації.\n\nДеталі: %1$s</string>
+    <string name="main_error_title">Помилка</string>
+    <string name="main_success_title">Успішно</string>
+    <string name="main_load_error">Не вдалося завантажити об’єкти. Відкрийте головний екран ще раз.</string>
+    <string name="main_load_error_details">Не вдалося завантажити об’єкти.\n\nДеталі: %1$s</string>
+    <string name="main_db_error">Не вдалося виконати операцію з базою даних.</string>
+    <string name="main_db_error_details">Не вдалося виконати операцію з базою даних.\n\nДеталі: %1$s</string>
+    <string name="main_operation_error">Не вдалося виконати операцію.</string>
+    <string name="main_operation_error_details">Не вдалося виконати операцію.\n\nДеталі: %1$s</string>
+    <string name="main_scan_error_title">Помилка зчитування</string>
+    <string name="main_scan_error">Не вдалося зчитати код. Спробуйте ще раз.</string>
+    <string name="main_scan_error_details">Не вдалося зчитати код.\n\nДеталі: %1$s</string>
+    <string name="main_scan_empty">Зчитаний код не містить інвентарного номера.</string>
+    <string name="main_scan_not_found_title">Об’єкт не знайдено</string>
+    <string name="main_scan_not_found">Об’єкт з інвентарним номером «%1$s» не знайдено.</string>
+    <string name="main_empty_list">У цій вкладці поки немає об’єктів.</string>
     <string name="module_barcode_already_installed">
     Модуль уже встановлений
 </string>
@@ -52,7 +75,4 @@
     <string name="media_error_empty_file">
     Фото відсутнє або файл порожній.
 </string>
-    <string name="yes">Так</string>
-    <string name="no">Ні</string>
-    <string name="dialog_close">Закрити повідомлення</string>
 </resources>

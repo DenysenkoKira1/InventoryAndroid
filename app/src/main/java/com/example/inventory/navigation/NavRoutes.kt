@@ -10,4 +10,7 @@ sealed interface NavRoutes : NavKey {
 
     @Serializable
     data object SearchInventory : NavRoutes
+
+    @Serializable
+    data class InventoryReview(val assetId: Long) : NavRoutes
 }

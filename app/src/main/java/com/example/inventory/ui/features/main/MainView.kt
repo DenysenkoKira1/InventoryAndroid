@@ -1,9 +1,9 @@
 package com.example.inventory.ui.features.main
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,10 +26,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -44,100 +43,88 @@ import com.example.inventory.core.constants.ONE_LINE_IN_TEXT
 import com.example.inventory.domain.models.Asset
 import com.example.inventory.ui.theme.InventoryTheme
 import com.example.inventory.ui.theme.inventoriedColor
+import com.example.inventory.ui.ui_kit.dialogs.BasicDialog
+import com.example.inventory.ui.ui_kit.dialogs.ConfirmActionDialog
+import com.example.inventory.ui.ui_kit.progress_indicator.AppCircularProgress
 import com.example.inventory.ui.ui_kit.bars.AppTopBar
 import com.example.inventory.ui.ui_kit.buttons.PrimaryButton
 import com.example.inventory.ui.ui_kit.buttons.SecondaryButton
 
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
+    vm: MainViewModel,
+    onNavToSearchInventoryScreen: () -> Unit,
+    onNavToInventoryReviewScreen: (Long) -> Unit,
     modifier: Modifier = Modifier,
-    onSearch: () -> Unit = {},
-    onScan: () -> Unit = {},
-    onClear: () -> Unit = {}
-) {
+    ) {
+    val viewState by vm.viewState.collectAsStateWithLifecycle()
+    val baseViewState by vm.baseViewState.collectAsStateWithLifecycle()
     val positionsState = rememberLazyListState()
-    var selectedTabIndex by rememberSaveable { mutableIntStateOf(0) }
+    val isEnabled = baseViewState.isDataLoaded &&
+            !viewState.isOperationRunning
+
+    LaunchedEffect(Unit) { vm.loadData() }
+
+    if (baseViewState.isShowAppBasicDialog) {
+        BasicDialog(
+            isSuccess = baseViewState.isSuccessAppBasicDialog,
+            title = baseViewState.titleAppBasicDialog,
+            message = baseViewState.messageAppBasicDialog,
+            onClose = vm::hideBasicDialog
+        )
+    }
+    if (baseViewState.isShowAppConfirmActionDialog) {
+        baseViewState.onConfirmAppConfirmActionDialog?.also { confirm ->
+            ConfirmActionDialog(
+                title = baseViewState.titleAppConfirmActionDialog,
+                message = baseViewState.messageAppConfirmActionDialog,
+                onConfirm = confirm,
+                onClose = vm::hideConfirmActionDialog
+            )
+        }
+    }
+    LaunchedEffect(
+        viewState.isGoToInventoryReviewScreen
+    ) {
+        if (viewState.isGoToInventoryReviewScreen) {
+            vm.markNavigationHandled()
+            onNavToInventoryReviewScreen(viewState.selectedAsset.id)
+        }
+    }
+
+    val uncheckedAssets = viewState.uncheckedAssets
+    val checkedAssets = viewState.checkedAssets
+    val shownAssets = if (viewState.selectedTabIndex == 0) {
+        uncheckedAssets
+    } else {
+        checkedAssets
+    }
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            GetAppTopBar(onClear = onClear)
-        },
+        modifier = modifier.fillMaxSize(),
+        topBar = { GetAppTopBar(vm, isEnabled) },
         bottomBar = {
             GetBottomBar(
-                onSearch = onSearch,
-                onScan = onScan
+                onSearch = onNavToSearchInventoryScreen,
+                onScan = vm::scan,
+                isEnabled = isEnabled
             )
         }
     ) { innerPadding ->
         Column(
-            Modifier
-                .fillMaxSize()
-                .padding(paddingValues = innerPadding)
+            Modifier.fillMaxSize().padding(innerPadding)
         ) {
-            val asset1 = Asset(
-                invNumber = "inv-1",
-                srnNumber = "ser-1",
-                name = "name-1 kjejflksjfkekjflw jdsfkjiewo;aww ekjuuorjwksdj wodjakor",
-                location = "location-1",
-                state = true
-            )
-            val asset2 = Asset(
-                invNumber = "inv-2",
-                srnNumber = "ser-2",
-                name = "name-2 kjejflksjfkekjflw jdsfkjiewo;aww ekjuuorjwksdj wodjakor",
-                location = "location-2",
-                state = false
-            )
-            val asset3 = Asset(
-                invNumber = "inv-3",
-                srnNumber = "ser-3",
-                name = "name-3 kjejflksjfkekjflw jdsfkjiewo;aww ekjuuorjwksdj wodjakor",
-                location = "location-3",
-                state = true
-            )
-            val asset4 = Asset(
-                invNumber = "inv-4",
-                srnNumber = "ser-4",
-                name = "name-4 kjejflksjfkekjflw jdsfkjiewo;aww ekjuuorjwksdj wodjakor",
-                location = "location-4",
-                state = true
-            )
-            val asset5 = Asset(
-                invNumber = "inv-5",
-                srnNumber = "ser-5",
-                name = "name-5 kjejflksjfkekjflw jdsfkjiewo;aww ekjuuorjwksdj wodjakor",
-                location = "location-5",
-                state = true
-            )
-            val asset6 = Asset(
-                invNumber = "inv-6",
-                srnNumber = "ser-6",
-                name = "name-6 kjejflksjfkekjflw jdsfkjiewo;aww ekjuuorjwksdj wodjakor",
-                location = "location-6",
-                state = false
-            )
-            val assets = listOf(asset1, asset2, asset3, asset4, asset5, asset6)
-            val uncheckedAssets = assets.filter { !it.state }
-            val checkedAssets = assets.filter { it.state }
-
-            val shownAssets = if (selectedTabIndex == 0) {
-                uncheckedAssets
-            } else {
-                checkedAssets
-            }
             PrimaryTabRow(
-                selectedTabIndex = selectedTabIndex,
+                selectedTabIndex = viewState.selectedTabIndex,
                 containerColor = MaterialTheme.colorScheme.surface
             ) {
                 Tab(
-                    selected = selectedTabIndex == 0,
+                    selected = viewState.selectedTabIndex == 0,
                     selectedContentColor = MaterialTheme.colorScheme.primary,
                     unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    onClick = { selectedTabIndex = 0 },
+                    onClick = { vm.onTabSelected(0) },
                     text = {
                         Text(
                             "${stringResource(R.string.unverified)} ${uncheckedAssets.size}",
@@ -145,12 +132,11 @@ fun MainScreen(
                         )
                     }
                 )
-
                 Tab(
-                    selected = selectedTabIndex == 1,
+                    selected = viewState.selectedTabIndex == 1,
                     selectedContentColor = MaterialTheme.colorScheme.primary,
                     unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    onClick = { selectedTabIndex = 1 },
+                    onClick = { vm.onTabSelected(1) },
                     text = {
                         Text(
                             "${stringResource(R.string.verified)} ${checkedAssets.size}",
@@ -159,38 +145,42 @@ fun MainScreen(
                     }
                 )
             }
-            GetContent(
-                assets = shownAssets.toMutableList(),
-                positionsState = positionsState
-            )
+            if (!isEnabled) {
+                AppCircularProgress()
+                return@Scaffold
+            }
+            GetContent(vm, shownAssets, positionsState)
         }
     }
+
 }
 
 @Composable
 private fun GetAppTopBar(
-    onClear: () -> Unit
+    vm: MainViewModel,
+    isEnabled: Boolean
 ) {
     AppTopBar(
         title = stringResource(R.string.inventory),
         actions = {
             IconButton(
-                onClick = {}
+                onClick = vm::onClickClear,
+                enabled = isEnabled
             ) {
                 Icon(
                     painterResource(R.drawable.clear_eraser),
-                    contentDescription = null
+                    contentDescription = stringResource(R.string.main_clear_title)
                 )
             }
         }
     )
 }
 
-
 @Composable
 private fun GetBottomBar(
     onSearch: () -> Unit,
-    onScan: () -> Unit
+    onScan: () -> Unit,
+    isEnabled: Boolean
 ) {
     Column (
         modifier = Modifier
@@ -201,23 +191,35 @@ private fun GetBottomBar(
         PrimaryButton(
             modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp),
             title = stringResource(R.string.scan),
-            onClick = onScan
+            onClick = onScan,
+            isEnabled = isEnabled
         )
         SecondaryButton(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
             title = stringResource(R.string.search_inv),
-            onClick = onSearch
+            onClick = onSearch,
+            isEnabled = isEnabled
         )
     }
 }
 
 @Composable
 private fun GetContent(
-//    vm: MainViewModel,
-    assets: MutableList<Asset>,
+    vm: MainViewModel,
+    assets: List<Asset>,
     positionsState: LazyListState,
-) {
+    ) {
     if (assets.isEmpty()) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = stringResource(R.string.main_empty_list),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
         return
     }
 
@@ -226,16 +228,16 @@ private fun GetContent(
             .fillMaxSize()
             .background(color = MaterialTheme.colorScheme.background),
         state = positionsState,
-    ) {
-        items(assets) { asset ->
-            ContentCard(asset)
+        ) {
+        items(assets, key = { it.id }) { asset ->
+            ContentCard(vm, asset)
         }
     }
 }
 
 @Composable
 private fun ContentCard(
-//    vm: MainViewModel,
+    vm: MainViewModel,
     asset: Asset
 ) {
     Card(
@@ -243,9 +245,8 @@ private fun ContentCard(
             .fillMaxWidth()
             .padding(top = 8.dp)
             .clickable(
-                onClick = {
-//                    vm.onCardClick(position)
-                }
+                enabled = asset.state,
+                onClick = { vm.onCardClick(asset) }
             ),
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(
@@ -260,14 +261,16 @@ private fun ContentCard(
                     .weight(1f)
                     .padding(end = 16.dp)
             ) {
-                Text(
-                    text = asset.invNumber,
-                    style = MaterialTheme.typography.bodyLarge,
-                    lineHeight = 24.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = ONE_LINE_IN_TEXT,
-                    overflow = TextOverflow.Ellipsis
-                )
+                if (asset.state) {
+                    Text(
+                        text = asset.invNumber,
+                        style = MaterialTheme.typography.bodyLarge,
+                        lineHeight = 24.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = ONE_LINE_IN_TEXT,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
 
                 if (asset.state) {
                     Spacer(modifier = Modifier.height(4.dp))
@@ -291,17 +294,15 @@ private fun ContentCard(
                     overflow = TextOverflow.Ellipsis
                 )
 
-                if (asset.state) {
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = asset.location,
-                        style = MaterialTheme.typography.bodyLarge,
-                        lineHeight = 24.sp,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        maxLines = ONE_LINE_IN_TEXT,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = asset.location,
+                    style = MaterialTheme.typography.bodyLarge,
+                    lineHeight = 24.sp,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = ONE_LINE_IN_TEXT,
+                    overflow = TextOverflow.Ellipsis
+                )
 
                 if (asset.state) {
                     Spacer(modifier = Modifier.height(4.dp))
@@ -315,12 +316,14 @@ private fun ContentCard(
                     )
                 }
             }
-            Icon(
-                modifier = Modifier.align(Alignment.CenterVertically),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                painter = painterResource(id = R.drawable.ic_arrow_right),
-                contentDescription = null
-            )
+            if (asset.state) {
+                Icon(
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    painter = painterResource(id = R.drawable.ic_arrow_right),
+                    contentDescription = null
+                )
+            }
         }
     }
 }
@@ -329,12 +332,22 @@ private fun ContentCard(
     widthDp = 390, heightDp = 760)
 @Composable
 private fun LightPreview() {
-    InventoryTheme(darkTheme = false) { MainScreen() }
+    InventoryTheme(darkTheme = false) { MainScreen(
+        vm = TODO(),
+        onNavToSearchInventoryScreen = TODO(),
+        onNavToInventoryReviewScreen = TODO(),
+        modifier = TODO()
+    ) }
 }
 
 @Preview(name = "Темна тема", showBackground = true,
     widthDp = 390, heightDp = 760)
 @Composable
 private fun DarkPreview() {
-    InventoryTheme(darkTheme = true) { MainScreen() }
+    InventoryTheme(darkTheme = true) { MainScreen(
+        vm = TODO(),
+        onNavToSearchInventoryScreen = TODO(),
+        onNavToInventoryReviewScreen = TODO(),
+        modifier = TODO()
+    ) }
 }

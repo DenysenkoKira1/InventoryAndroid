@@ -3,13 +3,17 @@ package com.example.inventory.navigation
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.*
 import androidx.navigation3.ui.NavDisplay
+import com.example.inventory.ui.features.inventory_info.InventoryReviewScreen
 import com.example.inventory.ui.features.main.MainScreen
-import com.example.inventory.ui.features.search_inventory.*
+import com.example.inventory.ui.features.main.MainViewModel
+import com.example.inventory.ui.features.search_inventory.SearchInventoryScreen
 
 @Composable
-fun NavGraphs(onMessage: (String) -> Unit) {
+fun NavGraphs() {
     val backStack = rememberNavBackStack(NavRoutes.Main)
     val goBack: () -> Unit = {
         if (backStack.size > 1) backStack.removeLastOrNull()
@@ -22,28 +26,29 @@ fun NavGraphs(onMessage: (String) -> Unit) {
         backStack = backStack,
         onBack = { goBack() },
         entryDecorators = listOf(
-            rememberSaveableStateHolderNavEntryDecorator()
+            rememberSaveableStateHolderNavEntryDecorator(),
+            rememberViewModelStoreNavEntryDecorator()
         ),
-        entryProvider = entryProvider {entry<NavRoutes.Main> {
-            MainScreen(
-                onSearch = {
-                    openScreen(NavRoutes.SearchInventory)
-                },
-                onScan = {
-                    onMessage("Сканер підключимо пізніше")
-                },
-                onClear = {
-                    onMessage("Очищення підключимо пізніше")
-                }
-            )
-        }
-            entry<NavRoutes.SearchInventory> {
-                SearchInventoryScreen(
-                    onBack = goBack,
-                    onSearch = {
-                        onMessage("Пошук Room підключимо пізніше")
+        entryProvider = entryProvider {
+            entry<NavRoutes.Main> {
+                val vmMain: MainViewModel = hiltViewModel()
+                MainScreen(
+                    vm = vmMain,
+                    onNavToSearchInventoryScreen = {
+                        openScreen(NavRoutes.SearchInventory)
+                    },
+                    onNavToInventoryReviewScreen = { assetId ->
+                        openScreen(NavRoutes.InventoryReview(assetId))
                     }
                 )
+            }
+            entry<NavRoutes.SearchInventory> {
+                SearchInventoryScreen(
+                    onBack = goBack
+                )
+            }
+            entry<NavRoutes.InventoryReview> {
+                InventoryReviewScreen()
             }
         }
     )

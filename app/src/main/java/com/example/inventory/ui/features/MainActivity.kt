@@ -3,7 +3,6 @@ package com.example.inventory.ui.features
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import com.example.inventory.R
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,6 +18,7 @@ class MainActivity : ComponentActivity() {
     @SuppressLint("StringFormatMatches")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         // Попереднє завантаження модуля сканера
         val moduleInstall = ModuleInstall.getClient(this)
         val moduleInstallRequest = ModuleInstallRequest.newBuilder()
@@ -76,12 +76,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             InventoryTheme {
-                NavGraphs(onMessage = { message ->
-                    Toast.makeText(
-                        this, message, Toast.LENGTH_SHORT
-                    ).show()
-                })
+                NavGraphs()
             }
         }
     }
-}
+} 

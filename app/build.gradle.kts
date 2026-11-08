@@ -70,6 +70,8 @@ dependencies {
     ksp(libs.room3.compiler)
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.lifecycle.runtime.compose)
+    implementation(libs.hilt.lifecycle.viewmodel.compose)
+    implementation(libs.lifecycle.viewmodel.navigation3)
 }
 
 room3 {
