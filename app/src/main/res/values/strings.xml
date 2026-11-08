@@ -47,6 +47,9 @@
     <string name="review_value_missing">Не вказано</string>
     <string name="review_error_title">Помилка завантаження</string>
     <string name="review_asset_not_found">Об’єкт не знайдено. Поверніться до списку та повторіть пошук.</string>
+    <string name="save">Зберегти</string>
+    <string name="cancel">Скасувати</string>
+    <string name="condition_empty">Довідник станів порожній.</string>
     <string name="review_load_error">Не вдалося завантажити дані об’єкта. Поверніться назад і спробуйте ще раз.</string>
     <string name="search_error_message">Не вдалося виконати пошук. Спробуйте ще раз.</string>
     <string name="module_barcode_already_installed">
