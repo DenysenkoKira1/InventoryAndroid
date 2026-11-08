@@ -33,6 +33,11 @@
     <string name="main_scan_not_found_title">Об’єкт не знайдено</string>
     <string name="main_scan_not_found">Об’єкт з інвентарним номером «%1$s» не знайдено.</string>
     <string name="main_empty_list">У цій вкладці поки немає об’єктів.</string>
+    <string name="search_serial_label">Серійний номер</string>
+    <string name="search_clear">Очистити поле серійного номера</string>
+    <string name="search_not_found">Об’єкт із таким серійним номером не знайдено. Перевірте номер і повторіть пошук.</string>
+    <string name="search_error_title">Помилка пошуку</string>
+    <string name="search_error_message">Не вдалося виконати пошук. Спробуйте ще раз.</string>
     <string name="module_barcode_already_installed">
     Модуль уже встановлений
 </string>

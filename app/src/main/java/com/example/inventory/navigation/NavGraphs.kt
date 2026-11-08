@@ -7,10 +7,10 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.*
 import androidx.navigation3.ui.NavDisplay
-import com.example.inventory.ui.features.inventory_info.InventoryReviewScreen
+import com.example.inventory.ui.features.inventory_info.*
 import com.example.inventory.ui.features.main.MainScreen
 import com.example.inventory.ui.features.main.MainViewModel
-import com.example.inventory.ui.features.search_inventory.SearchInventoryScreen
+import com.example.inventory.ui.features.search_inventory.*
 
 @Composable
 fun NavGraphs() {
@@ -43,8 +43,14 @@ fun NavGraphs() {
                 )
             }
             entry<NavRoutes.SearchInventory> {
+                val vmSearchInventory: SearchInventoryViewModel =
+                    hiltViewModel()
                 SearchInventoryScreen(
-                    onBack = goBack
+                    vm = vmSearchInventory,
+                    onBack = goBack,
+                    onNavToInventoryReviewScreen = { assetId ->
+                        openScreen(NavRoutes.InventoryReview(assetId))
+                    }
                 )
             }
             entry<NavRoutes.InventoryReview> {

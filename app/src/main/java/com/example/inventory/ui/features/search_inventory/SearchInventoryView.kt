@@ -6,59 +6,100 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.inventory.R
-import com.example.inventory.ui.theme.InventoryTheme
+import com.example.inventory.ui.features.search_inventory.items.*
 import com.example.inventory.ui.ui_kit.InputTextField
 import com.example.inventory.ui.ui_kit.bars.AppTopBar
+import com.example.inventory.ui.ui_kit.buttons.AppIconButton
 import com.example.inventory.ui.ui_kit.buttons.PrimaryButton
+import com.example.inventory.ui.ui_kit.dialogs.BasicDialog
+import com.example.inventory.ui.ui_kit.progress_indicator.*
 
 @Composable
 fun SearchInventoryScreen(
-    onBack: () -> Unit = {},
-    onSearch: (String) -> Unit = {}
-) {
+    vm: SearchInventoryViewModel,
+    onBack: () -> Unit,
+    onNavToInventoryReviewScreen: (Long) -> Unit,
+    ) {
+    val viewState by vm.viewState.collectAsStateWithLifecycle()
+    val baseViewState by vm.baseViewState.collectAsStateWithLifecycle()
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    LaunchedEffect(Unit) { vm.loadData() }
+    DisposableEffect(vm) {
+        onDispose { vm.onScreenClosed() }
+    }
+    LaunchedEffect(viewState.isGoToInventoryReviewScreen) {
+        if (viewState.isGoToInventoryReviewScreen) {
+            val assetId = viewState.asset.id
+            vm.markNavigationHandled()
+            onNavToInventoryReviewScreen(assetId)
+        }
+    }
+
+    if (baseViewState.isShowAppBasicDialog) {
+        BasicDialog(
+            title = baseViewState.titleAppBasicDialog,
+            message = baseViewState.messageAppBasicDialog,
+            isSuccess = baseViewState.isSuccessAppBasicDialog,
+            onClose = vm::hideBasicDialog
+        )
+    }
+
+    val search: () -> Unit = {
+        keyboardController?.hide()
+        vm.search()
+    }
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().imePadding(),
         topBar = {
-            GetTopBar(onBack = onBack)
+            GetTopBar(onBack = {
+                keyboardController?.hide()
+                onBack()
+            })
         },
         bottomBar = {
-            GetBottomBar()
+            GetBottomBar(
+                onSearch = search,
+                isEnabled = baseViewState.isDataLoaded
+                        && viewState.canSearch
+            )
         }
     ) { innerPadding ->
         GetContent(
-            innerPadding
+            innerPadding = innerPadding,
+            viewState = viewState,
+            isDataLoaded = baseViewState.isDataLoaded,
+            onSearchChanged = vm::onSearchChanged,
+            onSearchClear = vm::onSearchClear,
+            onSearch = search
         )
     }
 }
-
 @Composable
-private fun GetTopBar(
-    onBack: () -> Unit,
-) {
-    val keyboardController = LocalSoftwareKeyboardController.current
 
+private fun GetTopBar(onBack: () -> Unit) {
     AppTopBar(
         title = stringResource(R.string.search_by_serial_number),
         onBack = onBack
@@ -66,97 +107,96 @@ private fun GetTopBar(
 }
 
 @Composable
-private fun GetBottomBar () {
-    Box (
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(color = MaterialTheme.colorScheme.surface),
+private fun GetBottomBar(
+    onSearch: () -> Unit,
+    isEnabled: Boolean,
+    ) {
+    Box(
+        modifier = Modifier.fillMaxWidth()
+            .background(MaterialTheme.colorScheme.surface)
     ) {
         PrimaryButton(
             modifier = Modifier.padding(16.dp),
             title = stringResource(R.string.search),
-            onClick = {},
-            isEnabled = false
+            onClick = onSearch,
+            isEnabled = isEnabled
         )
     }
 }
 
 @Composable
 private fun GetContent(
-    innerPadding: PaddingValues
-) {
-    Column (
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues = innerPadding)
-            .background(color = MaterialTheme.colorScheme.background),
+    innerPadding: PaddingValues,
+    viewState: SearchInventoryState,
+    isDataLoaded: Boolean,
+    onSearchChanged: (String) -> Unit,
+    onSearchClear: () -> Unit,
+    onSearch: () -> Unit,
+    ) {
+    Column(
+        modifier = Modifier.fillMaxSize().padding(innerPadding)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(color = MaterialTheme.colorScheme.surface)
+            modifier = Modifier.fillMaxWidth()
+                .background(MaterialTheme.colorScheme.surface)
         ) {
-            GetSearchInput()
+            GetSearchInput(
+                viewState, onSearchChanged, onSearchClear, onSearch
+            )
         }
-
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(vertical = 8.dp)
+            modifier = Modifier.fillMaxSize().padding(vertical = 8.dp)
                 .clip(MaterialTheme.shapes.medium)
-                .background(color = MaterialTheme.colorScheme.surface),
+                .background(MaterialTheme.colorScheme.surface),
             contentAlignment = Alignment.Center
-        ) { }
+        ) {
+            if (!isDataLoaded) {
+                AppCircularProgress()
+            } else if (viewState.searchScreenState ==
+                SearchScreenState.NOT_FOUND_BY_SERIAL_NUMBER) {
+                Text(
+                    text = stringResource(R.string.search_not_found),
+                    modifier = Modifier.padding(24.dp),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+        }
     }
 }
 
 @Composable
 private fun GetSearchInput(
-//    vm: SearchInventoryViewModel,
-//    viewState: SearchInventoryState,
-) {
-    val keyboardController = LocalSoftwareKeyboardController.current
-
+    viewState: SearchInventoryState,
+    onSearchChanged: (String) -> Unit,
+    onSearchClear: () -> Unit,
+    onSearch: () -> Unit,
+    ) {
     InputTextField(
-        modifier = Modifier
-            .padding(start = 16.dp, end = 16.dp, bottom = 8.dp),
+        modifier = Modifier.padding(
+            start = 16.dp, end = 16.dp, bottom = 8.dp
+        ),
+        value = viewState.searchText,
+        onValueChange = onSearchChanged,
+        label = stringResource(R.string.search_serial_label),
         leadingIcon = {
             Icon(
-                painter = painterResource(id = R.drawable.ic_search),
+                painter = painterResource(R.drawable.ic_search),
                 contentDescription = null
             )
         },
         trailingIcon = {
-            Icon(
-//                modifier = Modifier.clickable { vm.onSearchClear() },
-                painter = painterResource(id = R.drawable.ic_cross_circle),
-                contentDescription = null
+            AppIconButton(
+                onClick = onSearchClear,
+                iconRes = R.drawable.ic_cross_circle,
+                contentDescription = stringResource(
+                    R.string.search_clear
+                ),
+                isEnabled = !viewState.isOperationRunning
             )
         },
-        keyboardActions = KeyboardActions(
-            onSearch = {
-                keyboardController?.hide()
-//                if (viewState.searchText.length >= MIN_SYMBOLS_TO_SEARCH) {
-//                    vm.search()
-//                }
-            }
-        ),
-        keyboardOptions = KeyboardOptions(
-            imeAction = ImeAction.Search
-        ),
-//        value = viewState.searchText,
-//        onValueChange = vm::onSearchChanged
+        keyboardActions = KeyboardActions(onSearch = { onSearch() }),
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search)
     )
-}
-
-@Preview(name = "Світла тема", showBackground = true, widthDp = 390, heightDp = 760)
-@Composable
-private fun LightPreview() {
-    InventoryTheme(darkTheme = false) { SearchInventoryScreen() }
-}
-
-@Preview(name = "Темна тема", showBackground = true, widthDp = 390, heightDp = 760)
-@Composable
-private fun DarkPreview() {
-    InventoryTheme(darkTheme = true) { SearchInventoryScreen() }
 }
