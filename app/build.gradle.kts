@@ -68,6 +68,8 @@ dependencies {
     implementation(libs.room3.runtime)
     implementation(libs.sqlite.framework)
     ksp(libs.room3.compiler)
+    implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.lifecycle.runtime.compose)
 }
 
 room3 {

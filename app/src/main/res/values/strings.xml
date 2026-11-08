@@ -52,4 +52,7 @@
     <string name="media_error_empty_file">
     Фото відсутнє або файл порожній.
 </string>
+    <string name="yes">Так</string>
+    <string name="no">Ні</string>
+    <string name="dialog_close">Закрити повідомлення</string>
 </resources>
