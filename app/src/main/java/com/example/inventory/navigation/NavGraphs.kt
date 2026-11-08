@@ -13,7 +13,10 @@ import com.example.inventory.ui.features.main.MainViewModel
 import com.example.inventory.ui.features.search_inventory.*
 
 @Composable
-fun NavGraphs() {
+fun NavGraphs(
+    onCorrectClick: (Long) -> Unit = {},
+    onIncorrectClick: (Long) -> Unit = {},
+    ) {
     val backStack = rememberNavBackStack(NavRoutes.Main)
     val goBack: () -> Unit = {
         if (backStack.size > 1) backStack.removeLastOrNull()
@@ -53,8 +56,16 @@ fun NavGraphs() {
                     }
                 )
             }
-            entry<NavRoutes.InventoryReview> {
-                InventoryReviewScreen()
+            entry<NavRoutes.InventoryReview> { key ->
+                val vmInventoryReview: InventoryReviewViewModel =
+                    hiltViewModel()
+                InventoryReviewScreen(
+                    vm = vmInventoryReview,
+                    assetId = key.assetId,
+                    onNavBack = goBack,
+                    onCorrectClick = onCorrectClick,
+                    onIncorrectClick = onIncorrectClick
+                )
             }
         }
     )
