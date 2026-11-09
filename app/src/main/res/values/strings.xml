@@ -67,6 +67,26 @@
     <string name="condition_empty">Довідник станів порожній.</string>
     <string name="review_load_error">Не вдалося завантажити дані об’єкта. Поверніться назад і спробуйте ще раз.</string>
     <string name="search_error_message">Не вдалося виконати пошук. Спробуйте ще раз.</string>
+    <string name="edit_comment">Коментар</string>
+    <string name="edit_name_counter">%1$d/100</string>
+    <string name="edit_saving">Зберігаємо зміни…</string>
+    <string name="edit_success_title">Успішно</string>
+    <string name="edit_saved">Результат інвентаризації збережено.</string>
+    <string name="edit_error_title">Не вдалося зберегти зміни</string>
+    <string name="edit_error_details">Не вдалося виконати дію.\n\nДеталі: %1$s</string>
+    <string name="edit_asset_missing">Об’єкт не знайдено. Поверніться до списку.</string>
+    <string name="edit_invalid_name">Вкажіть назву довжиною до 100 символів.</string>
+    <string name="edit_empty_inventory">Вкажіть інвентарний номер.</string>
+    <string name="edit_empty_serial">Вкажіть серійний номер.</string>
+    <string name="edit_invalid_quantity">Вкажіть цілу кількість від 1.</string>
+    <string name="edit_invalid_condition">Оберіть стан об’єкта з довідника.</string>
+    <string name="edit_comment_required">Для повного редагування додайте коментар.</string>
+    <string name="edit_photo_required">Для повного редагування додайте фото.</string>
+    <string name="edit_duplicate_inventory">Інший об’єкт уже має такий інвентарний номер.</string>
+    <string name="edit_duplicate_serial">Інший об’єкт уже має такий серійний номер.</string>
+    <string name="edit_photo_unavailable">Фото недоступне. Оберіть інше зображення або приберіть його з форми.</string>
+    <string name="edit_cleanup_title">Дані збережено</string>
+    <string name="edit_cleanup_details">Дані збережено в базі, але не вдалося прибрати зайвий файл фото. Нове збереження не потрібне.\n\nДеталі: %1$s</string>
     <string name="module_barcode_already_installed">
     Модуль уже встановлений
 </string>

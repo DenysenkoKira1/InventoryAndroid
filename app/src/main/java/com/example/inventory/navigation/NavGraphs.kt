@@ -2,28 +2,34 @@ package com.example.inventory.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
+import androidx.lifecycle.viewmodel.navigation3.*
 import androidx.navigation3.runtime.*
 import androidx.navigation3.ui.NavDisplay
+import com.example.inventory.ui.features.inventory_edit.*
+import com.example.inventory.ui.features.inventory_edit.items.*
 import com.example.inventory.ui.features.inventory_info.*
 import com.example.inventory.ui.features.main.MainScreen
 import com.example.inventory.ui.features.main.MainViewModel
 import com.example.inventory.ui.features.search_inventory.*
 
 @Composable
-fun NavGraphs(
-    onCorrectClick: (Long) -> Unit = {},
-    onIncorrectClick: (Long) -> Unit = {},
-    ) {
+fun NavGraphs() {
     val backStack = rememberNavBackStack(NavRoutes.Main)
+    var showCheckedTab by rememberSaveable { mutableStateOf(false) }
     val goBack: () -> Unit = {
         if (backStack.size > 1) backStack.removeLastOrNull()
     }
     val openScreen: (NavKey) -> Unit = { route ->
         if (backStack.lastOrNull() != route) backStack.add(route)
     }
+
     NavDisplay(
         modifier = Modifier.fillMaxSize(),
         backStack = backStack,
@@ -35,6 +41,12 @@ fun NavGraphs(
         entryProvider = entryProvider {
             entry<NavRoutes.Main> {
                 val vmMain: MainViewModel = hiltViewModel()
+                LaunchedEffect(showCheckedTab) {
+                    if (showCheckedTab) {
+                        vmMain.onTabSelected(1)
+                        showCheckedTab = false
+                    }
+                }
                 MainScreen(
                     vm = vmMain,
                     onNavToSearchInventoryScreen = {
@@ -46,10 +58,9 @@ fun NavGraphs(
                 )
             }
             entry<NavRoutes.SearchInventory> {
-                val vmSearchInventory: SearchInventoryViewModel =
-                    hiltViewModel()
+                val vmSearch: SearchInventoryViewModel = hiltViewModel()
                 SearchInventoryScreen(
-                    vm = vmSearchInventory,
+                    vm = vmSearch,
                     onBack = goBack,
                     onNavToInventoryReviewScreen = { assetId ->
                         openScreen(NavRoutes.InventoryReview(assetId))
@@ -57,14 +68,38 @@ fun NavGraphs(
                 )
             }
             entry<NavRoutes.InventoryReview> { key ->
-                val vmInventoryReview: InventoryReviewViewModel =
-                    hiltViewModel()
+                val vmReview: InventoryReviewViewModel = hiltViewModel()
                 InventoryReviewScreen(
-                    vm = vmInventoryReview,
+                    vm = vmReview,
                     assetId = key.assetId,
                     onNavBack = goBack,
-                    onCorrectClick = onCorrectClick,
-                    onIncorrectClick = onIncorrectClick
+                    onCorrectClick = { id ->
+                        openScreen(NavRoutes.InventoryEdit(
+                            id, InventoryEditMode.LIMITED
+                        ))
+                    },
+                    onIncorrectClick = { id ->
+                        openScreen(NavRoutes.InventoryEdit(
+                            id, InventoryEditMode.FULL
+                        ))
+                    }
+                )
+            }
+            entry<NavRoutes.InventoryEdit> { key ->
+                val vmEdit: InventoryEditViewModel = hiltViewModel()
+                InventoryEditScreen(
+                    vm = vmEdit,
+                    assetId = key.assetId,
+                    mode = key.mode,
+                    onNavBack = goBack,
+                    onSaved = {
+                        if (backStack.lastOrNull() == key) {
+                            showCheckedTab = true
+                            while (backStack.size > 1) {
+                                backStack.removeLastOrNull()
+                            }
+                        }
+                    }
                 )
             }
         }
