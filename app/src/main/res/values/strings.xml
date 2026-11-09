@@ -14,7 +14,10 @@
     <string name="no">Ні</string>
     <string name="dialog_close">Закрити повідомлення</string>
     <string name="main_clear_title">Очистити результати інвентаризації</string>
-    <string name="main_clear_question">Усі об’єкти знову стануть неперевіреними. Інші дані об’єктів залишаться без змін. Продовжити?</string>
+    <string name="main_clear_question">Скинути ознаку перевірки для всіх об’єктів?
+        Вони знову стануть неперевіреними. Усі інші дані, зокрема стан об’єкта,
+        кількість, коментарі та фото, залишаться без змін.</string>
+    <string name="main_clear_nothing">Перевірених об’єктів немає. Змін не виконано.</string>
     <string name="main_clear_success">Результати інвентаризації очищено.</string>
     <string name="main_clear_error">Не вдалося очистити результати інвентаризації.</string>
     <string name="main_clear_error_details">Не вдалося очистити результати інвентаризації.\n\nДеталі: %1$s</string>

@@ -180,13 +180,16 @@ class MainViewModel @Inject constructor(
 
     fun onClickClear() {
         if (!baseViewState.value.isDataLoaded ||
-            viewState.value.isOperationRunning) return
+            viewState.value.isOperationRunning ||
+            baseViewState.value.isShowAppConfirmActionDialog) return
         showConfirmActionDialog(
             title = context.getString(R.string.main_clear_title),
             message = context.getString(R.string.main_clear_question),
             onConfirm = {
-                hideConfirmActionDialog()
-                clearInventory()
+                if (baseViewState.value.isShowAppConfirmActionDialog) {
+                    hideConfirmActionDialog()
+                    clearInventory()
+                }
             }
         )
     }
@@ -200,14 +203,17 @@ class MainViewModel @Inject constructor(
             try {
                 repo.getAssetsRepo().clearInventoryState().either(
                     ::handleFailure,
-                    {
+                    { count ->
+                        val messageResId = if (count == 0) {
+                            R.string.main_clear_nothing
+                        } else {
+                            R.string.main_clear_success
+                        }
                         showBasicDialog(
                             title = context.getString(
                                 R.string.main_success_title
                             ),
-                            message = context.getString(
-                                R.string.main_clear_success
-                            ),
+                            message = context.getString(messageResId),
                             isSuccess = true
                         )
                     }
@@ -219,8 +225,7 @@ class MainViewModel @Inject constructor(
                 showBasicDialog(
                     title = context.getString(R.string.main_error_title),
                     message = context.getString(
-                        R.string.main_clear_error_details,
-                        message
+                        R.string.main_clear_error_details, message
                     ),
                     isSuccess = false
                 )

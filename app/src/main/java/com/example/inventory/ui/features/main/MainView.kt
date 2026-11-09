@@ -172,7 +172,8 @@ private fun GetAppTopBar(
             ) {
                 Icon(
                     painterResource(R.drawable.clear_eraser),
-                    contentDescription = stringResource(R.string.main_clear_title)
+                    contentDescription =
+                        stringResource(R.string.main_clear_title)
                 )
             }
         }

@@ -23,6 +23,6 @@ internal interface AssetDao {
     @Update
     suspend fun update(asset: AssetEntity): Int
 
-    @Query("UPDATE assets SET State = 0 WHERE State = 1")
+    @Query("UPDATE assets SET state = 0 WHERE state = 1")
     suspend fun clearInventoryState(): Int
 }
