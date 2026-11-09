@@ -41,6 +41,7 @@ fun SearchInventoryScreen(
     vm: SearchInventoryViewModel,
     onBack: () -> Unit,
     onNavToInventoryReviewScreen: (Long) -> Unit,
+    onNavToInventoryDetailsScreen: (Long) -> Unit,
     ) {
     val viewState by vm.viewState.collectAsStateWithLifecycle()
     val baseViewState by vm.baseViewState.collectAsStateWithLifecycle()
@@ -52,9 +53,13 @@ fun SearchInventoryScreen(
     }
     LaunchedEffect(viewState.isGoToInventoryReviewScreen) {
         if (viewState.isGoToInventoryReviewScreen) {
-            val assetId = viewState.asset.id
+            val asset = viewState.asset
             vm.markNavigationHandled()
-            onNavToInventoryReviewScreen(assetId)
+            if (asset.state) {
+                onNavToInventoryDetailsScreen(asset.id)
+            } else {
+                onNavToInventoryReviewScreen(asset.id)
+            }
         }
     }
 
@@ -97,8 +102,8 @@ fun SearchInventoryScreen(
         )
     }
 }
-@Composable
 
+@Composable
 private fun GetTopBar(onBack: () -> Unit) {
     AppTopBar(
         title = stringResource(R.string.search_by_serial_number),

@@ -35,13 +35,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.inventory.R
 import com.example.inventory.core.constants.ONE_LINE_IN_TEXT
 import com.example.inventory.domain.models.Asset
-import com.example.inventory.ui.theme.InventoryTheme
 import com.example.inventory.ui.theme.inventoriedColor
 import com.example.inventory.ui.ui_kit.dialogs.BasicDialog
 import com.example.inventory.ui.ui_kit.dialogs.ConfirmActionDialog
@@ -50,13 +48,13 @@ import com.example.inventory.ui.ui_kit.bars.AppTopBar
 import com.example.inventory.ui.ui_kit.buttons.PrimaryButton
 import com.example.inventory.ui.ui_kit.buttons.SecondaryButton
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     vm: MainViewModel,
     onNavToSearchInventoryScreen: () -> Unit,
     onNavToInventoryReviewScreen: (Long) -> Unit,
+    onNavToInventoryDetailsScreen: (Long) -> Unit,
     modifier: Modifier = Modifier,
     ) {
     val viewState by vm.viewState.collectAsStateWithLifecycle()
@@ -89,8 +87,13 @@ fun MainScreen(
         viewState.isGoToInventoryReviewScreen
     ) {
         if (viewState.isGoToInventoryReviewScreen) {
+            val asset = viewState.selectedAsset
             vm.markNavigationHandled()
-            onNavToInventoryReviewScreen(viewState.selectedAsset.id)
+            if (asset.state) {
+                onNavToInventoryDetailsScreen(asset.id)
+            } else {
+                onNavToInventoryReviewScreen(asset.id)
+            }
         }
     }
 
@@ -326,28 +329,4 @@ private fun ContentCard(
             }
         }
     }
-}
-
-@Preview(name = "Світла тема", showBackground = true,
-    widthDp = 390, heightDp = 760)
-@Composable
-private fun LightPreview() {
-    InventoryTheme(darkTheme = false) { MainScreen(
-        vm = TODO(),
-        onNavToSearchInventoryScreen = TODO(),
-        onNavToInventoryReviewScreen = TODO(),
-        modifier = TODO()
-    ) }
-}
-
-@Preview(name = "Темна тема", showBackground = true,
-    widthDp = 390, heightDp = 760)
-@Composable
-private fun DarkPreview() {
-    InventoryTheme(darkTheme = true) { MainScreen(
-        vm = TODO(),
-        onNavToSearchInventoryScreen = TODO(),
-        onNavToInventoryReviewScreen = TODO(),
-        modifier = TODO()
-    ) }
 }

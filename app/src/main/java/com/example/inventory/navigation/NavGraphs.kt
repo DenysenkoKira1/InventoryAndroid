@@ -12,6 +12,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.navigation3.*
 import androidx.navigation3.runtime.*
 import androidx.navigation3.ui.NavDisplay
+import com.example.inventory.ui.features.inventory_details.*
 import com.example.inventory.ui.features.inventory_edit.*
 import com.example.inventory.ui.features.inventory_edit.items.*
 import com.example.inventory.ui.features.inventory_info.*
@@ -54,6 +55,9 @@ fun NavGraphs() {
                     },
                     onNavToInventoryReviewScreen = { assetId ->
                         openScreen(NavRoutes.InventoryReview(assetId))
+                    },
+                    onNavToInventoryDetailsScreen = { assetId ->
+                        openScreen(NavRoutes.InventoryDetails(assetId))
                     }
                 )
             }
@@ -64,6 +68,9 @@ fun NavGraphs() {
                     onBack = goBack,
                     onNavToInventoryReviewScreen = { assetId ->
                         openScreen(NavRoutes.InventoryReview(assetId))
+                    },
+                    onNavToInventoryDetailsScreen = { assetId ->
+                        openScreen(NavRoutes.InventoryDetails(assetId))
                     }
                 )
             }
@@ -81,6 +88,19 @@ fun NavGraphs() {
                     onIncorrectClick = { id ->
                         openScreen(NavRoutes.InventoryEdit(
                             id, InventoryEditMode.FULL
+                        ))
+                    }
+                )
+            }
+            entry<NavRoutes.InventoryDetails> { key ->
+                val vmDetails: InventoryDetailsViewModel = hiltViewModel()
+                InventoryDetailsScreen(
+                    vm = vmDetails,
+                    assetId = key.assetId,
+                    onNavBack = goBack,
+                    onEditClick = { id ->
+                        openScreen(NavRoutes.InventoryEdit(
+                            id, InventoryEditMode.LIMITED
                         ))
                     }
                 )

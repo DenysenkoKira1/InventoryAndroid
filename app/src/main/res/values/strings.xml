@@ -87,6 +87,15 @@
     <string name="edit_photo_unavailable">Фото недоступне. Оберіть інше зображення або приберіть його з форми.</string>
     <string name="edit_cleanup_title">Дані збережено</string>
     <string name="edit_cleanup_details">Дані збережено в базі, але не вдалося прибрати зайвий файл фото. Нове збереження не потрібне.\n\nДеталі: %1$s</string>
+    <string name="details_edit">Редагувати об’єкт</string>
+    <string name="details_error_title">Помилка відкриття об’єкта</string>
+    <string name="details_error_details">Не вдалося прочитати дані або фото.\n\nДеталі: %1$s</string>
+    <string name="details_asset_missing">Об’єкт не знайдено. Поверніться до попереднього екрана.</string>
+    <string name="details_not_checked">Об’єкт ще не перевірений. Поверніться та знайдіть його скануванням або введенням серійного номера.</string>
+    <string name="details_unknown_condition">Невідомий стан (%1$s)</string>
+    <string name="details_no_comment">Коментар не додано.</string>
+    <string name="details_no_photo">Фото не додано.</string>
+    <string name="details_photo_unavailable">Збережене фото недоступне. Його можна замінити у формі редагування.</string>
     <string name="module_barcode_already_installed">
     Модуль уже встановлений
 </string>

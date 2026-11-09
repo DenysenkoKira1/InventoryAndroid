@@ -172,8 +172,10 @@ class MainViewModel @Inject constructor(
     fun onCardClick(asset: Asset) {
         if (!asset.state || !baseViewState.value.isDataLoaded ||
             viewState.value.isOperationRunning) return
-        _viewState.update { it.copy(selectedAsset = asset) }
-
+        _viewState.update { it.copy(
+            selectedAsset = asset,
+            isGoToInventoryReviewScreen = true
+        ) }
     }
 
     fun onClickClear() {

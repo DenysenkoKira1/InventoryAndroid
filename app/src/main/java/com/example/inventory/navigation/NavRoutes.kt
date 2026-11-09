@@ -16,6 +16,9 @@ sealed interface NavRoutes : NavKey {
     data class InventoryReview(val assetId: Long) : NavRoutes
 
     @Serializable
+    data class InventoryDetails(val assetId: Long) : NavRoutes
+
+    @Serializable
     data class InventoryEdit(
         val assetId: Long,
         val mode: InventoryEditMode
