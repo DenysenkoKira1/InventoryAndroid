@@ -22,7 +22,6 @@ sealed class Failure {
     data object DuplicateInventoryNumber : Failure()
     data object DuplicateSerialNumber : Failure()
 
-    abstract class FeatureFailure : Failure()
 
     data class UseCaseResultFailure(
         val result: IUseCaseResultFailure
